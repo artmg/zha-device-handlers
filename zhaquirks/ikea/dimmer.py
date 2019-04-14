@@ -2,9 +2,10 @@
 import logging
 
 from zigpy.profiles import zha
+# https://github.com/zigpy/zigpy/blob/master/zigpy/zcl/clusters/general.py
 from zigpy.zcl.clusters.general import (
-    Groups, Identify, Ota, Scenes, Basic, PowerConfiguration, PollControl,
-    LevelControl, OnOff
+    Basic, PowerConfiguration, Identify, Alarms, Groups, OnOff,
+    LevelControl, Ota # , Scenes, Basic, PollControl 
 )
 from zigpy.zcl.clusters.lighting import Color
 from zigpy.zcl.clusters.lightlink import LightLink
@@ -31,13 +32,17 @@ class IkeaDimmer(CustomDevice):
             'input_clusters': [
                 Basic.cluster_id,
                 PowerConfiguration.cluster_id,
-                OnOff.cluster_id,
+                Identify.cluster_id,
+                Alarms.cluster_id,
                 IKEA_DIMMER_CLUSTER,
                 LightLink.cluster_id
             ],
             'output_clusters': [
-                Basic.cluster_id,
+                Identify.cluster_id,
                 Groups.cluster_id,
+                OnOff.cluster_id, 
+                LevelControl.cluster_id, 
+                Ota.cluster_id, 
                 LightLink.cluster_id
             ],
         },
@@ -45,21 +50,25 @@ class IkeaDimmer(CustomDevice):
     replacement = {
         'endpoints': {
             1: {
-                'manufacturer': 'LUMI',
-                'model': 'lumi.sensor_switch.aq2',
+                'manufacturer': 'IKEA of Sweden',
+                'model': 'TRADFRI wireless dimmer',
                 'device_type': zha.DeviceType.REMOTE_CONTROL,
                 'input_clusters': [
                     BasicCluster,
                     PowerConfigurationCluster,
-                    TemperatureMeasurementCluster,
-                    XIAOMI_CLUSTER_ID
+                    IdentifyCluster,
+                    AlarmsCluster,
+                    IKEA_DIMMER_CLUSTER,
+                    LightLinkCluster
                 ],
                 'output_clusters': [
-                    Basic.cluster_id,
+                    Identify.cluster_id,
                     Groups.cluster_id,
-                    XIAOMI_CLUSTER_ID,
-                    OnOff.cluster_id,
+                    OnOff.cluster_id, 
+                    LevelControl.cluster_id, 
+                    Ota.cluster_id, 
+                    LightLink.cluster_id
                 ],
-            }
+            },
         },
     }
